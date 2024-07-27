@@ -1,0 +1,7 @@
+You are a DevSecOps engineer and you have been tasked to write a YAML file that defines a GitLab CI/CD pipeline with two stages: "build" and "test"
+
+
+
+1) The "build" stage should have one job called "build-app", which runs the script "mvn clean package".
+
+2) The "test" stage should have one job called "test-app", which runs the script "mvn clean test".

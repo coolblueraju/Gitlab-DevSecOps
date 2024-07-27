@@ -1,0 +1,19 @@
+You are a DevSecOps engineer and you have been tasked to write a YAML file that defines a GitLab DevSecOps pipeline with three stages: "build", "test" and "sastscan".
+
+
+
+1) The "build" stage should have one job called "build-app", which runs the script "mvn clean package".
+
+2) The "test" stage should have one job called "test-app", which runs the script "mvn clean test".
+
+3) The "sastscan" stage should have one job called "sast-scan-app",  which runs the SonarCloud scan. Use the below values for integrating SonarCloud in DevSecOps pipeline:
+
+Image =  maven:3.8.5-openjdk-17-slim
+
+Sonar URL = https://sonarcloud.io/
+
+Sonar Org = gitlabdevsecopsintegrtion
+
+Sonar ProjectKey = gitLabdevsecopsintegration
+
+Sonar Token= 14ad4818f21384add02744d3f9e34d

@@ -1,0 +1,54 @@
+# Define the stages of the pipeline
+stages:
+  - build
+  - test
+  - sastscan
+
+# Job for the build stage
+build-app:
+  stage: build       # Assign this job to the 'build' stage
+  image: maven:3.8.5-openjdk-17-slim  # Use the Maven Docker image
+  script:
+    - mvn clean package  # Command to compile and package the application
+
+# Job for the test stage
+test-app:
+  stage: test        # Assign this job to the 'test' stage
+  image: maven:3.8.5-openjdk-17-slim  # Use the Maven Docker image
+  script:
+    - mvn clean test  # Command to run tests on the application
+
+# Job for the SAST scan stage
+sast-scan-app:
+  stage: sastscan    # Assign this job to the 'sastscan' stage
+  image: maven:3.8.5-openjdk-17-slim  # Use the Maven Docker image
+  script:
+    - mvn sonar:sonar  # Command to run SonarCloud scan
+  variables:
+    SONAR_HOST_URL: https://sonarcloud.io/  # SonarCloud URL
+    SONAR_ORGANIZATION: gitlabdevsecopsintegrtion  # SonarCloud organization
+    SONAR_PROJECT_KEY: gitLabdevsecopsintegration  # SonarCloud project key
+    SONAR_TOKEN: 14ad4818f21384add02744d3f9e34d  # SonarCloud token
+
+/*
+stages:
+  - build
+  - test
+  - sastscan
+ 
+build-app:
+  stage: build
+  script:
+    - mvn clean package
+ 
+test-app:
+  stage: test
+  script:
+    - mvn clean test
+
+sast-scan-app:
+  stage: sastscan
+  image: maven:3.8.5-openjdk-17-slim
+  script:
+    - mvn verify package sonar:sonar -Dsonar.host.url=https://sonarcloud.io/ -Dsonar.organization=gitlabdevsecopsintegrtion -Dsonar.projectKey=gitLabdevsecopsintegration -Dsonar.login=14ad4818f21384add02744d3f9e34d
+*/
