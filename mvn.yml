@@ -1,0 +1,16 @@
+# Define the stages of the pipeline
+stages:
+  - build  # The build stage will run first
+  - test   # The test stage will run after the build stage
+
+# Job for the build stage
+build-app:
+  stage: build       # Assign this job to the 'build' stage
+  script:
+    - mvn clean package  # Command to compile and package the application
+
+# Job for the test stage
+test-app:
+  stage: test        # Assign this job to the 'test' stage
+  script:
+    - mvn clean test  # Command to run tests on the application
