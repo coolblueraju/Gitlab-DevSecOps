@@ -1,0 +1,61 @@
+# Define the stages of the pipeline
+stages:
+  - build
+  - test
+  - scascan
+
+# Job for the build stage
+build-app:
+  stage: build       # Assign this job to the 'build' stage
+  image: maven:3.8.5-openjdk-11-slim  # Use the Maven Docker image
+  script:
+    - mvn clean package  # Command to compile and package the application
+
+# Job for the test stage
+test-app:
+  stage: test        # Assign this job to the 'test' stage
+  image: maven:3.8.5-openjdk-11-slim  # Use the Maven Docker image
+  script:
+    - mvn clean test  # Command to run tests on the application
+
+# Job for the SCA scan stage
+sca-scan-app:
+  stage: scascan    # Assign this job to the 'scascan' stage
+  image: maven:3.8.5-openjdk-11-slim  # Use the Maven Docker image
+  script:
+    - apt-get update && apt-get install -y curl  # Install curl if not already available
+    - curl -sL https://static.snyk.io/cli/latest/snyk-linux > /usr/local/bin/snyk  # Download Snyk CLI
+    - chmod +x /usr/local/bin/snyk  # Make the Snyk CLI executable
+    - snyk auth $SNYK_TOKEN  # Authenticate with Snyk using the provided token
+    - snyk test --all-projects  # Run the Snyk SCA scan
+  variables:
+    SNYK_TOKEN: 2f4afa39-c493-080c1a8f9014  # Snyk API token
+
+
+#############################################################
+.gitlab-ci.yml file should contain below given code:
+
+stages:
+  - build
+  - test
+  - scascan
+ 
+build-app:
+  stage: build
+  script:
+    - mvn clean package
+ 
+test-app:
+  stage: test
+  script:
+    - mvn clean test
+
+sca-scan-app:
+  stage: scascan
+  image: maven:3.8.5-openjdk-11-slim
+  script: |
+      SNYK_TOKEN='2f4afa39-c493-080c1a8f9014'
+      export SNYK_TOKEN
+      mvn snyk:test
+
+#################################################################
